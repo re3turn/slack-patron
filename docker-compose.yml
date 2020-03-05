@@ -9,6 +9,7 @@ services:
       - ./config.yml:/usr/local/slack-patron/config.yml
     links:
      - mongo
+    restart: always
 
   viewer:
     build:
@@ -18,9 +19,15 @@ services:
     volumes:
       - ./config.yml:/usr/local/slack-patron/config.yml
     ports:
-     - "9292:9292"
+     - "127.0.0.1:9292:9292"
     links:
      - mongo
+    restart: always
 
   mongo:
     image: mongo
+    command: --logpath=/var/log/mongodb/mongo.log --profile=1 --slowms=100
+    volumes:
+        - ./datadir:/data/db
+        - ./mongo-log:/var/log/mongodb
+    restart: always
