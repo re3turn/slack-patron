@@ -1,0 +1,9 @@
+build:
+  docker:
+    worker: ./logger/Dockerfile
+    web: ./viewer/Dockerfile
+run:
+  worker: sh ./init.sh &&
+          bundle exec ruby logger/logger.rb
+  web: sh ./init.sh &&
+       bundle exec rackup viewer/config.ru -o 0.0.0.0 -p $PORT
