@@ -4,8 +4,8 @@ config = YAML.load_file('./config.yml')
 
 db_config = config['database']
 
-mongodb_url = db_config['uri'] #ENV['MONGODB_URL']
-client = Mongo::Client.new(mongodb_url)
+mongodb_url = db_config['uri'] #ENV['MONGODB_URI']
+client = Mongo::Client.new(mongodb_url, retry_writes: false)
 db = client.database
 
 Users = db['users']
