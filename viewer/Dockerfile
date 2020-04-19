@@ -4,8 +4,7 @@ LABEL maintainer="namatyage@gmail.com"
 ARG SRCDIR="/usr/local/slack-patron"
 
 RUN set -x && \
-	apk upgrade --update && \
-	apk add --update \
+	apk add  --no-cache \
 	build-base \
 	openssl \
 	nodejs \
