@@ -1,4 +1,4 @@
-version: '2'
+version: '3'
 services:
   logger:
     build:
@@ -28,6 +28,10 @@ services:
     image: mongo
     command: --logpath=/var/log/mongodb/mongo.log --profile=1 --slowms=100
     volumes:
-        - ./datadir:/data/db
-        - ./mongo-log:/var/log/mongodb
+      - datadir:/data/db
+      - mongo-log:/var/log/mongodb
     restart: always
+
+volumes:
+  datadir:
+  mongo-log:
