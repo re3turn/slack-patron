@@ -1,7 +1,7 @@
 build:
   docker:
-    worker: ./logger/Dockerfile
-    web: ./viewer/Dockerfile
+    worker: ./logger/heroku/Dockerfile
+    web: ./viewer/heroku/Dockerfile
 run:
   worker: sh ./init.sh &&
           bundle exec ruby logger/logger.rb
