@@ -139,9 +139,42 @@ export default class extends Component {
         </div>
       );
     };
-    const botMessage = (teamInfo, message, showChannel) => {
+    const getBotText = (message) => {
+      const attachment = find(message.attachments, (attachment) => { return attachment.text || attachment.fallback });
+      const file = find(message.files, (file) => file.url_private);
+      let text = "";
+      if (message.text) {
+        text += message.text;
+      }
+      if (attachment) {
+        text += (text ? "\n" : "")
+          + (attachment.text ? attachment.text + "\n" : "")
+          + (attachment.fallback ? attachment.fallback : "");
+      }
+      return text;
+    }
+    const getText = (message) => {
       const attachment = find(message.attachments, (attachment) => attachment.text);
-      const text = (!message.text && attachment) ? attachment.text : message.text;
+      const file = find(message.files, (file) => file.url_private);
+      let text = "";
+      if (message.text) {
+        text += message.text;
+      }
+      if (attachment) {
+        text += (text ? "\n" : "")
+          + (attachment.title ? attachment.title + "\n" : "")
+          + (attachment.text ? attachment.text : "");
+      }
+      if (file) {
+        text += (text ? "\n" : "")
+          + (file.title ? file.title + "\n" : "")
+          + (file.url_private ? "<" + file.url_private + ">" : "");
+      }
+      return text;
+    }
+    const botMessage = (teamInfo, message, showChannel) => {
+      const text = getBotText(message);
+      const attachment = find(message.attachments, (attachment) => attachment.text);
       const icon = message.icons ? message.icons.image_48 : (attachment ? attachment.author_icon : '');
       return <SlackMessagePrototype
           message={message}
@@ -153,13 +186,14 @@ export default class extends Component {
         />
     };
     const normalMessage = (teamInfo, message, user, showChannel) => {
+      const text = getText(message);
       return <SlackMessagePrototype
           message={message}
           icon={user && user.profile.image_48}
           username={user && (user.profile.display_name || user.profile.real_name || user.name)}
           showChannel={showChannel}
           teamInfo={teamInfo}
-          text={message.text}
+          text={text}
         />
     };
 
@@ -169,13 +203,10 @@ export default class extends Component {
 
     const message = this.props.message;
     const showChannel = this.props.type === MessagesType.SEARCH_MESSAGES;
-    switch (this.props.message.subtype) {
-      case 'bot_message':
-        return botMessage(this.props.teamInfo, message, showChannel);
-        break;
-      default:
-        return normalMessage(this.props.teamInfo, message, this.getUser(message.user), showChannel);
-        break;
+    if (this.props.message.bot_id || this.props.message.subtype == "bot_message") {
+      return botMessage(this.props.teamInfo, message, showChannel);
+    } else {
+      return normalMessage(this.props.teamInfo, message, this.getUser(message.user), showChannel);
     }
   }
 }
