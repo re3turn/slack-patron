@@ -18,8 +18,8 @@ GEM
     multipart-post (2.1.1)
     mustermann (1.1.1)
       ruby2_keywords (~> 0.0.1)
-    nio4r (2.4.0)
-    puma (4.1.0)
+    nio4r (2.5.2)
+    puma (4.3.3)
       nio4r (~> 2.0)
     rack (2.2.2)
     rack-protection (2.0.8.1)
@@ -49,8 +49,8 @@ DEPENDENCIES
   bson_ext
   json
   mongo
-  rake
   puma
+  rake
   rubyzip
   sinatra
   slack-api
