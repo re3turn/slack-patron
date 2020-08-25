@@ -7,6 +7,7 @@ cd ${SCRIPT_DIR}
 
 ruby ./bin/init.rb --token=${SLACK_ACCESS_TOKEN}
 sed -i "s#mongo:27017#${MONGODB_URI}#" ./config.yml
+sed -i "s#slack_logger#${MONGODB_NAME}#" ./config.yml
 
 set +u
 
