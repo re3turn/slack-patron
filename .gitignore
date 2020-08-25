@@ -6,3 +6,5 @@ config.yml
 /pids
 /datadir
 /mongo-log
+.env
+
