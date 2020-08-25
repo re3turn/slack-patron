@@ -1,4 +1,4 @@
-version: '3'
+version: '3.7'
 services:
   logger:
     build:
@@ -8,8 +8,10 @@ services:
     volumes:
       - ./config.yml:/usr/local/slack-patron/config.yml
     links:
-     - mongo
+      - mongo
     restart: always
+    networks:
+      - slack-patron-network
 
   viewer:
     build:
@@ -19,10 +21,20 @@ services:
     volumes:
       - ./config.yml:/usr/local/slack-patron/config.yml
     ports:
-     - "127.0.0.1:9292:9292"
+      - 9292:9292
     links:
      - mongo
     restart: always
+    networks:
+      - proxy-network
+      - slack-patron-network
+    environment:
+      - VIRTUAL_HOST
+      - VIRTUAL_PORT=9292
+      - LETSENCRYPT_HOST
+      - LETSENCRYPT_EMAIL
+      - BASIC_AUTH_USERNAME
+      - BASIC_AUTH_PASSWORD
 
   mongo:
     image: mongo
@@ -30,8 +42,20 @@ services:
     volumes:
       - datadir:/data/db
       - mongo-log:/var/log/mongodb
+    ports:
+        - "27018:27017"
     restart: always
+    networks:
+      - slack-patron-network
 
 volumes:
   datadir:
   mongo-log:
+
+networks:
+  proxy-network:
+    external:
+      name: proxy_network
+  slack-patron-network:
+    name: slack_patron_network
+
