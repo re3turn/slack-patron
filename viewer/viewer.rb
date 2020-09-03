@@ -64,6 +64,8 @@ def messages(params)
       subtype: 'bot_message'
     }
   ] unless params[:search].nil?
+
+  # search thread replies
   condition[:thread_ts] = params[:thread_ts] unless params[:thread_ts].nil?
 
   all_messages = Messages
