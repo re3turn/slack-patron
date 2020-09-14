@@ -163,12 +163,21 @@ export default class extends Component {
       }
       return text;
     }
+    const removeDuplicateUrl = (messageText) => {
+      let pattern = /(.*)\<(https?:\/\/[\w\-\.\/\?\,\#\&\%\!\*\'\(\)\@\=\+\$\,\;\:\u3000-\u30FE\u4E00-\u9FA0\uFF01-\uFFE3]+)\|(https?:\/\/[\w\-\.\/\?\,\#\&\%\!\*\'\(\)\@\=\+\$\,\;\:\u3000-\u30FE\u4E00-\u9FA0\uFF01-\uFFE3]+)\>(.*)/;
+      let matchMessage = messageText.match(pattern);
+      if (matchMessage) {
+        return matchMessage[1] + '<' + matchMessage[2] + '>' + matchMessage[4];
+      }
+      return messageText;
+    }
+
     const getText = (message) => {
       const attachment = find(message.attachments, (attachment) => attachment.text);
       const file = find(message.files, (file) => file.url_private);
       let text = "";
       if (message.text) {
-        text += message.text;
+        text += removeDuplicateUrl(message.text);
       }
       if (attachment) {
         text += (text ? "\n ------------------------ \n" : "")
