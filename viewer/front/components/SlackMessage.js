@@ -171,7 +171,7 @@ export default class extends Component {
         text += message.text;
       }
       if (attachment) {
-        text += (text ? "\n" : "")
+        text += (text ? "\n ------------------------ \n" : "")
           + (attachment.title ? attachment.title + "\n" : "")
           + (attachment.text ? attachment.text : "");
       }
