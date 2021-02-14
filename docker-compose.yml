@@ -7,7 +7,7 @@ services:
     container_name: slack-patron-logger
     volumes:
       - ./config.yml:/usr/local/slack-patron/config.yml
-    links:
+    depends_on:
       - mongo
     restart: always
     networks:
@@ -22,7 +22,7 @@ services:
       - ./config.yml:/usr/local/slack-patron/config.yml
     ports:
       - 9292:9292
-    links:
+    depends_on:
      - mongo
     restart: always
     networks:
